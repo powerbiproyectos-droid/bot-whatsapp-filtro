@@ -58,6 +58,13 @@ Respondé de forma breve, cordial y sin generar conflicto. Máximo 2 oraciones.`
     });
 
     const claudeData = await claudeRes.json();
+    console.log('Claude response:', JSON.stringify(claudeData));
+    
+    if (!claudeData.content || !claudeData.content[0]) {
+      console.error('Error de Claude:', JSON.stringify(claudeData));
+      return;
+    }
+    
     const respuestaBot = claudeData.content[0].text;
 
     // Responder a la persona
