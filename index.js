@@ -5,8 +5,8 @@ app.use(express.json());
 const VERIFY_TOKEN = 'Bot-Filtro-Martin';
 const WHATSAPP_TOKEN = 'EAAZCfKoheyZBIBRo3QXNy9lUc98kUcNvcs7jemBJ2ZAYpZBZAw1N2KKIrChgw2qluPLZCXKg9b1ZBVCW1HbXvFSj6msZBnhysbfd3rHuyz2Xba9ON8Wxm0TnUdY4Vrr8ZAsmMZCO8rqtoEnjP01ZBWqpRNZApneZCKrgyrFDXYd8kebgswNDbt9JQu6hQDMvTwqmOD60XgnqLgDlEIt4t6vMeHfUanJFgSnEUBu8bbFZAOu3eUAYya1qjfyqmZBDQ7ZCXh550fCzOD3rBm1z2Fm2xmbQ8gZDZD';
 const PHONE_NUMBER_ID = '1187968214390970';
-const MI_NUMERO_PERSONAL = '5491131252609'; // Tu número personal sin + ni espacios
-const ANTHROPIC_API_KEY = 'TU_API_KEY_DE_CLAUDE_AQUI';
+const MI_NUMERO_PERSONAL = '5491134628481'; // Tu número personal sin + ni espacios
+const ANTHROPIC_API_KEY = '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';
 
 // Verificación webhook
 app.get('/webhook', (req, res) => {
