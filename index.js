@@ -6,7 +6,7 @@ const VERIFY_TOKEN = 'Bot-Filtro-Martin';
 const WHATSAPP_TOKEN = 'EAAZCfKoheyZBIBRo3QXNy9lUc98kUcNvcs7jemBJ2ZAYpZBZAw1N2KKIrChgw2qluPLZCXKg9b1ZBVCW1HbXvFSj6msZBnhysbfd3rHuyz2Xba9ON8Wxm0TnUdY4Vrr8ZAsmMZCO8rqtoEnjP01ZBWqpRNZApneZCKrgyrFDXYd8kebgswNDbt9JQu6hQDMvTwqmOD60XgnqLgDlEIt4t6vMeHfUanJFgSnEUBu8bbFZAOu3eUAYya1qjfyqmZBDQ7ZCXh550fCzOD3rBm1z2Fm2xmbQ8gZDZD';
 const PHONE_NUMBER_ID = '1039622265911962';
 const MI_NUMERO_PERSONAL = '5491134628481'; // Tu número personal sin + ni espacios
-const ANTHROPIC_API_KEY = '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';
+const GEMINI_API_KEY = 'AQ.Ab8RN6JjQmlhqI2VL6mgNuWjGaRv1zShXVU_7-p8vU-7S4n9EA';
 
 // Verificación webhook
 app.get('/webhook', (req, res) => {
@@ -38,34 +38,27 @@ app.post('/webhook', async (req, res) => {
     console.log(`Mensaje de ${nombreRemitente}: ${textoRecibido}`);
 
     // Generar respuesta cordial con Claude
-    const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
+    const claudeRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 300,
-        messages: [{
-          role: 'user',
-          content: `Sos un asistente que responde mensajes de WhatsApp de forma cordial y neutral. 
-La persona se llama ${nombreRemitente} y escribió: "${textoRecibido}"
-Respondé de forma breve, cordial y sin generar conflicto. Máximo 2 oraciones.`
+        contents: [{
+          parts: [{
+            text: `Sos un asistente que responde mensajes de WhatsApp de forma cordial y neutral. La persona se llama ${nombreRemitente} y escribió: "${textoRecibido}". Respondé de forma breve, cordial y sin generar conflicto. Máximo 2 oraciones.`
+          }]
         }]
       })
     });
 
     const claudeData = await claudeRes.json();
-    console.log('Claude response:', JSON.stringify(claudeData));
-    
-    if (!claudeData.content || !claudeData.content[0]) {
-      console.error('Error de Claude:', JSON.stringify(claudeData));
+    console.log('Gemini response:', JSON.stringify(claudeData));
+
+    if (!claudeData.candidates || !claudeData.candidates[0]) {
+      console.error('Error de Gemini:', JSON.stringify(claudeData));
       return;
     }
-    
-    const respuestaBot = claudeData.content[0].text;
+
+    const respuestaBot = claudeData.candidates[0].content.parts[0].text;
 
     // Responder a la persona
     await enviarMensaje(numeroRemitente, respuestaBot);
